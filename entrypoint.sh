@@ -83,6 +83,7 @@ api_request() {
 
   local exit_code="$?"
   local errors="$(cat "$out" | jq '.errors')"
+  echo "EXIT CODE ${exit_code}"
 
   if [[ $exit_code != '0' ]]; then
     log "There's been a curl error when querying the API"
