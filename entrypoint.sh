@@ -83,7 +83,7 @@ api_request() {
 
   local exit_code="$?"
   local errors="$(cat "$out" | jq '.errors')"
-  log $(cat "$out")
+  cat "$out"
   log "EXIT CODE ${exit_code}"
 
   if [[ $exit_code != '0' ]]; then
@@ -164,6 +164,7 @@ step "Creating development theme"
 theme_push_log="$(mktemp)"
 echo $mktemp
 echo "theme_push_log=${theme_push_log}"
+echo "abc" | cat - 1.txt > 2.txt
 shopify theme push --development --json $theme_root > "$theme_push_log" && cat "$theme_push_log"
 preview_url="$(cat "$theme_push_log" | tail -n 1 | jq -r '.theme.preview_url')"
 preview_id="$(cat "$theme_push_log" | tail -n 1 | jq -r '.theme.id')"
