@@ -83,7 +83,7 @@ api_request() {
 
   local exit_code="$?"
   local errors="$(cat "$out" | jq '.errors')"
-  cat "$out"
+  cat "$err"
   log "EXIT CODE ${exit_code}"
 
   if [[ $exit_code != '0' ]]; then
