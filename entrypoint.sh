@@ -95,8 +95,6 @@ api_request() {
     cat "$err" 1>&2
     return 1
   fi
-
-  cat "$out"
 }
 
 cleanup() {
@@ -168,8 +166,10 @@ fi
 
 theme_push_log="$(mktemp)"
 shopify theme push --development --json $theme_root > "$theme_push_log" && cat "$theme_push_log"
+cat $theme_push_log
 preview_url="$(cat "$theme_push_log" | tail -n 1 | jq -r '.theme.preview_url')"
 preview_id="$(cat "$theme_push_log" | tail -n 1 | jq -r '.theme.id')"
+echo "preview_url=${preview_url}"
 
 step "Configuring Lighthouse CI"
 
