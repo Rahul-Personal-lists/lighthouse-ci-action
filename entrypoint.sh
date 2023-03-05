@@ -162,7 +162,7 @@ log "Will run Lighthouse CI on $host"
 
 step "Creating development theme"
 theme_push_log="$(mktemp)"
-echo $mktemp
+#echo $mktemp
 echo "theme_push_log=${theme_push_log}"
 echo "abc" | cat - 1.txt > 2.txt
 shopify theme push --development --json $theme_root > "$theme_push_log" && cat "$theme_push_log"
