@@ -147,7 +147,7 @@ else
   export SHOPIFY_PASSWORD="$SHOP_APP_PASSWORD"
 fi
 
-shopify login --store=${SHOP_STORE} --password=${SHOP_ACCESS_TOKEN}
+shopify login #--store=${SHOP_STORE} --password=${SHOP_ACCESS_TOKEN}
 
 host="https://${SHOP_STORE#*(https://|http://)}"
 theme_root="${THEME_ROOT:-.}"
@@ -164,7 +164,7 @@ if [[ -n "${SHOP_PULL_THEME+x}" ]]; then
 fi
 
 theme_push_log="$(mktemp)"
-echo $theme_push_log
+cat $theme_push_log
 shopify theme push --development --json $theme_root > "$theme_push_log" && cat "$theme_push_log"
 echo $theme_push_log
 preview_url="$(cat "$theme_push_log" | tail -n 1 | jq -r '.theme.preview_url')"
