@@ -97,7 +97,7 @@ api_request() {
    # return 1
   fi
 
-  cat "$out"
+  cat "$err"
 }
 
 cleanup() {
