@@ -84,21 +84,19 @@ api_request() {
 
   local exit_code="$?"
   local errors="$(cat "$out" | jq '.errors')"
-  cat "$err"
-  log "EXIT CODE ${exit_code}"
 
   if [[ $exit_code != '0' ]]; then
     log "There's been a curl error when querying the API"
     cat "$err" 1>&2
     return 1
-  #elif [[ $errors != 'null' ]]; then
-  #  log "There's been an error when querying the API"
-  #  log "$errors"
-  # cat "$err" 1>&2
-   # return 1
+  elif [[ $errors != 'null' ]]; then
+    log "There's been an error when querying the API"
+    log "$errors"
+    cat "$err" 1>&2
+    return 1
   fi
 
-  cat "$err"
+  cat "$out"
 }
 
 cleanup() {
@@ -169,13 +167,9 @@ if [[ -n "${SHOP_PULL_THEME+x}" ]]; then
 fi
 
 theme_push_log="$(mktemp)"
-echo "theme_push_log=${theme_push_log}"
-echo "${theme_push_log}"
 shopify theme push --development --json $theme_root > "$theme_push_log" && cat "$theme_push_log"
-cat "${theme_push_log}"
 preview_url="$(cat "$theme_push_log" | tail -n 1 | jq -r '.theme.preview_url')"
 preview_id="$(cat "$theme_push_log" | tail -n 1 | jq -r '.theme.id')"
-step "After reating development theme "
 
 step "Configuring Lighthouse CI"
 
@@ -248,7 +242,6 @@ module.exports = async (browser) => {
   }
   // Get preview cookie
   console.error('Getting preview cookie...');
-  console.error($preview_url)
   await page.goto('$preview_url');
   // close session for next run
   await page.close();
