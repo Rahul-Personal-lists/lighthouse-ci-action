@@ -83,18 +83,15 @@ api_request() {
   set -e
 
   local exit_code="$?"
-  local errors="$(cat "$out" | jq '.errors')"
-
+  
   if [[ $exit_code != '0' ]]; then
     log "There's been a curl error when querying the API"
     cat "$err" 1>&2
     return 1
-  elif [[ $errors != 'null' ]]; then
-    log "There's been an error when querying the API"
-    log "$errors"
-    cat "$err" 1>&2
-    return 1
+
   fi
+
+  cat "$out"
 }
 
 cleanup() {
@@ -147,7 +144,7 @@ else
   export SHOPIFY_PASSWORD="$SHOP_APP_PASSWORD"
 fi
 
-shopify login #--store=${SHOP_STORE} --password=${SHOP_ACCESS_TOKEN}
+shopify login
 
 host="https://${SHOP_STORE#*(https://|http://)}"
 theme_root="${THEME_ROOT:-.}"
@@ -156,6 +153,7 @@ theme_root="${THEME_ROOT:-.}"
 [[ -z ${SHOP_PASSWORD+x} ]] && shop_password='' || shop_password="$SHOP_PASSWORD"
 
 log "Will run Lighthouse CI on $host"
+
 step "Creating development theme"
 
 if [[ -n "${SHOP_PULL_THEME+x}" ]]; then
@@ -165,10 +163,8 @@ fi
 
 theme_push_log="$(mktemp)"
 shopify theme push --development --json $theme_root > "$theme_push_log" && cat "$theme_push_log"
-cat $theme_push_log
 preview_url="$(cat "$theme_push_log" | tail -n 1 | jq -r '.theme.preview_url')"
 preview_id="$(cat "$theme_push_log" | tail -n 1 | jq -r '.theme.id')"
-echo "preview_url=${preview_url}"
 
 step "Configuring Lighthouse CI"
 
@@ -241,6 +237,7 @@ module.exports = async (browser) => {
   }
   // Get preview cookie
   console.error('Getting preview cookie...');
+  console.errr('preview',$preview_url)
   await page.goto('$preview_url');
   // close session for next run
   await page.close();
