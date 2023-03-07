@@ -143,8 +143,8 @@ if [[ -n "$SHOP_ACCESS_TOKEN" ]]; then
 else
   export SHOPIFY_PASSWORD="$SHOP_APP_PASSWORD"
 fi
-
-shopify login
+echo $SHOP_STORE
+shopify login --store $SHOP_STORE
 
 host="https://${SHOP_STORE#*(https://|http://)}"
 theme_root="${THEME_ROOT:-.}"
