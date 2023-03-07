@@ -143,10 +143,9 @@ if [[ -n "$SHOP_ACCESS_TOKEN" ]]; then
 else
   export SHOPIFY_PASSWORD="$SHOP_APP_PASSWORD"
 fi
-echo "SHOP_STORE=${SHOP_STORE}"
-shopify whoami
+echo "SHOP_STORE=${SHOP_STORE}/admin"
 shopify login --store "${SHOP_STORE}/admin"
-
+shopify whoami
 host="https://${SHOP_STORE#*(https://|http://)}"
 theme_root="${THEME_ROOT:-.}"
 
