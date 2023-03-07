@@ -144,7 +144,8 @@ else
   export SHOPIFY_PASSWORD="$SHOP_APP_PASSWORD"
 fi
 echo "SHOP_STORE=${SHOP_STORE}"
-shopify login --store ${SHOP_STORE}
+shopify whoami
+shopify login --store "${SHOP_STORE}/admin"
 
 host="https://${SHOP_STORE#*(https://|http://)}"
 theme_root="${THEME_ROOT:-.}"
